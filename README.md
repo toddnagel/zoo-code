@@ -1,8 +1,8 @@
-# create-react-app-redux-router-saga-boilerplate - filling the gaps for non-trival apps
+# create-react-app-redux-router-saga-boilerplate
 
-create-react-app is great but even a basic app needs more than a component renderer. Simple boilerplate to fill the gaps.
+This is a practice project for a zoo project, git clone and npm install, then npm start to run.
 
-create-react-app +
+Built using create-react-app +
 
 - redux - https://redux.js.org/docs/introduction/
 - react-router - https://reacttraining.com/react-router/
