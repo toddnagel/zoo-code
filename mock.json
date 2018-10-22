@@ -1,0 +1,18 @@
+{
+    "animals": [
+    {"name": "Mike", "species": "Monkey", "oversize": "false", "dob": "10-14-2018", "cost": "534.23" }, 
+    {"name": "Paul", "species": "Giant Panda", "oversize": "true", "dob": "10-14-2018", "cost": "534.23"}, 
+    {"name": "Eve", "species": "Elephant", "oversize": "true", "dob": "10-14-2018", "cost": "534.23"},    
+    {"name": "Mary", "species": "Meerkat", "oversize": "false", "dob": "10-14-2018", "cost": "534.23"}    
+    ],
+    "species": ["Monkey", "Lion", "Meerkat", "Fennec Fox", "Coral Snake", "Tiger", "Elephant"],
+    "needed": [
+        ["Monkey", 4, 2],
+        ["Lion", 2, 2],
+        ["Meerkat", 8, 2],
+        ["Fennec Fox", 2, 2],
+        ["Coral Snake", 2, 2],
+        ["Tiger", 2, 2],
+        ["Elephant", 2, 2]        
+    ]
+}
