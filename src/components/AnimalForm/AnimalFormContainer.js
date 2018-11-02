@@ -10,19 +10,19 @@ import { submitForm, modifyAnimal, resetForm } from 'sagas/animalSaga/actions';
 
 const mapStateToProps = state => {
   
-  let initialValues = {};
+  let initialFormValues = {};
 
   if(state.animalSaga.isEditing){
-    initialValues = {
+    initialFormValues = {
       ...state.animalSaga.animals[state.animalSaga.editing],
-      dob: new Date(moment(initialValues.dob).format('MM-DD-YYYY'))
+      dob: new Date(moment(initialFormValues.dob).format('MM-DD-YYYY'))
     }
   }
 
   return {
     animalSaga: state.animalSaga,
     form: 'animalForm',
-    initialValues,
+    initialValues: initialFormValues
   }
 }
 

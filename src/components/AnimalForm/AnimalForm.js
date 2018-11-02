@@ -172,7 +172,7 @@ class AnimalForm extends Component {
             </Grid>
             <Grid item xs={4}> 
             <Field
-              value={this.state.dob || new Date(this.state.dob) || new Date()}
+              value={this.state.dob ? new Date(this.state.dob) : new Date(initialValues.dob)}
               name="dob"
               component={DatePicker}
               required
@@ -186,15 +186,7 @@ class AnimalForm extends Component {
               onChange={(event, date)=> this.handleDate(date)}
               formatDate={(date) => moment(date).format('MM-DD-YYYY')}  
               format={null}     
-              validate={[
-                (value, allValues, props, name) => {
-                      let customErrors = dynamicValidator(value, {
-                        required: true,
-                        msg: { required: errors.required }
-                      });
-                      return customErrors;
-                 }
-           ]}               
+              validate={[required]}               
             />
             </Grid>
           </Grid>
@@ -220,6 +212,10 @@ AnimalForm.propTypes = {
   submitForm: PropTypes.func.isRequired,
   resetForm: PropTypes.func.isRequired,
   modifyAnimal: PropTypes.func.isRequired,
+  isSubmitting: PropTypes.bool,
+  isEditing: PropTypes.bool,
+  editing: PropTypes.number,
+  initialValues: PropTypes.object.isRequired,
   pristine: PropTypes.any, // from redux-form
   submitting: PropTypes.any, // from redux-form
   reset:  PropTypes.any, // from redux-form
