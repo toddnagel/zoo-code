@@ -1,4 +1,4 @@
-export const required = value => (value || typeof value === 'number' ? undefined : 'Required field')
+export const required = value => (value || typeof value === 'number' ? undefined : 'Required field') // moved to dynamicValidator
 
 export const alphaNumeric = value =>
   value && /[^a-zA-Z0-9 ]/i.test(value)
@@ -67,4 +67,20 @@ export const onlyDecimal = value => {
   } else {
     return sections[0]
   }
+}
+
+export const dynamicValidator = (value, validationObj) => {
+  //required validation
+  if (validationObj.required === true) {
+    if (!value) {
+      return validationObj.msg;
+    }
+  }
+
+  //number validation
+  if (validationObj.type === 'number') {
+    if (isNaN(Number(value))) {
+      return 'Must be a number'; //Error msg
+    }
+  }   
 }

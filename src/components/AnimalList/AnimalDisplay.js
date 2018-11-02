@@ -49,7 +49,7 @@ const styles = theme => ({
   }
 });
 
-const AnimalDisplay = ({ classes, theme, animal, key, handleEdit, handleDelete, isEditing, isSubmiting }) => {
+const AnimalDisplay = ({ classes, animal, handleEdit, handleDelete, isEditing, isSubmitting }) => {
 
   if(!animal){ return <span>Loading...</span>}
 
@@ -57,11 +57,11 @@ const AnimalDisplay = ({ classes, theme, animal, key, handleEdit, handleDelete, 
   const maintenanceCost = `Maintenance is ${formatter.format(animal.cost)}`;
   const animalImage = animal.species.toLowerCase().replace(' ', '-');
 
-  if(isEditing && isSubmiting) return <div>Loading...</div>;
+  if(isEditing && isSubmitting) return <div>Loading...</div>;
 
   return (
     
-    <Grid item xs={6} {...key}>
+    <Grid item xs={6}>
       <Card className={classes.card}> 
       <div className={classes.row}> 
         <Avatar
@@ -104,10 +104,12 @@ const AnimalDisplay = ({ classes, theme, animal, key, handleEdit, handleDelete, 
 }
 
 AnimalDisplay.propTypes = {
+  animal: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   handleEdit: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
-  isEditing: PropTypes.bool
+  isEditing: PropTypes.bool.isRequired,
+  isSubmitting: PropTypes.bool.isRequired,
 };
 
 export default withStyles(styles)(AnimalDisplay);

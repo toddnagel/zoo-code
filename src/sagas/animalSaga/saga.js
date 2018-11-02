@@ -1,13 +1,13 @@
 import { call, all, put, takeLatest } from 'redux-saga/effects'
 import * as actions from './actions'
 
-import { request } from '../../modules/client';
+import { request } from 'modules/client'; 
 
 let defaultState = {
-  message: 'animalSaga initialized',
+  message: 'The zoo has been initialized.',
   editing: null,
   isEditing: false,
-  isSubmiting: false
+  isSubmitting: false
 }
 
 function* loadAnimals() {
@@ -15,15 +15,15 @@ function* loadAnimals() {
   try {
     
     const response = yield call(request, 'http://localhost:3000/mock.json');
-    console.log(response);
+    
     yield put({
       type: actions.LOAD_ANIMALS_SUCCESS,
       payload: {
         ...defaultState,
         animals: [...response.animals],
         species: [...response.species],
-        formData: [...response.formData],
-        message: 'animals saga has been run'
+        formData: response.formData,
+        message: 'Data for the zoo has been loaded.'
       },
     });
   }
@@ -33,7 +33,7 @@ function* loadAnimals() {
       type: actions.LOAD_ANIMALS_FAIL,
       payload: {
         ...defaultState,
-        message: "API Error!"
+        message: "The zoo API has failed."
       },
     });
   }
@@ -43,7 +43,7 @@ function* editAnimal({payload}) {
   yield put({
     type: actions.LOAD_EDIT_FORM,
     payload: {
-      message: 'load edit form has been run'
+      message: 'The modify animal form has been initialized.'
     }
   })
 }
@@ -55,8 +55,8 @@ function* formSubmitted({payload}) {
       animal: [
         ...payload.animal
       ],
-      isSubmiting: false,
-      message: 'form submitted has been run'
+      isSubmitting: false,
+      message: 'The animal form has been submitted.'
     }
   })
 }
@@ -68,9 +68,9 @@ function* modifyFormSubmitted({payload}) {
       animal: [
         ...payload.animal
       ],
-      isSubmiting: false,
+      isSubmitting: false,
       index: payload.index,
-      message: 'modify form submitted has been run'
+      message: 'The modify animal form has been submitted.'
     }
   })
 }

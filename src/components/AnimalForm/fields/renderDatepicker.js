@@ -17,7 +17,7 @@ export const renderDatepicker = ({ input, label, type, value, initialValue, stat
         minDate={new Date(moment().subtract(60, 'years').calendar())}
         autoOk
         className="form-control"
-        onChange={(event, date)=> handleDate(date)}
+        onChange={(event,date)=> handleDate(date)}
         formatDate={(date) => moment(date).format('MM-DD-YYYY')}
                 
       />

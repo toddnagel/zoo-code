@@ -24,32 +24,53 @@ export const deleteAnimal = (index) => {
 const ACTION_HANDLERS = {
   
   [action.LOAD_ANIMALS_SUCCESS]: (state, action) => {
-    return { ...state, ...action.payload }
+    return { 
+      ...state, 
+      ...action.payload
+    }
   },
   [action.LOAD_ANIMALS_FAIL]: (state, action) => {
-    return { ...state, ...action.payload }
+    return { 
+      ...state, 
+      ...action.payload }
   },
   [action.DELETE_ANIMAL]: (state, action) => {
-    return { ...state, animals: [ ...state.animals.filter((data, i) => i !== action.payload) ] }
+    return { 
+      ...state, 
+      animals: [ ...state.animals.filter((data, i) => i !== action.payload) ] 
+    }
   },
   [action.EDIT_ANIMAL]: (state, action) => {
-    return { ...state, editing: action.payload, isEditing: true }
+    return { 
+      ...state, 
+      editing: action.payload, 
+      isEditing: true }
   },
-  [action.RESET_FORM]: (state, action) => {
+  [action.RESET_FORM]: (state) => {
     return { 
       ...state, 
       editing: '',
       isEditing: false,
     }
   },
-  [action.FORM_SUBMITTED]: (state, action) => {
-    return { ...state, isSubmiting: true }
+  [action.FORM_SUBMITTED]: (state) => {
+    return { 
+      ...state, 
+      isSubmitting: true }
   },
   [action.MODIFY_FORM_SUBMITTED]: (state, action) => {
-    return { ...state, isSubmiting: true }
+    return { 
+      ...state, 
+      isSubmitting: true
+    }
   },
   [action.FORM_SUBMITTED_SUCCESS]: (state, action) => {
-    return { ...state, isSubmiting: false, message: action.payload.message, animals: [ ...state.animals, ...action.payload.animal ] }
+    return { 
+        ...state, 
+        isSubmitting: false, 
+        message: action.payload.message, 
+        animals: [ ...state.animals, ...action.payload.animal ] 
+      }
   },
   [action.MODIFY_FORM_SUBMITTED_SUCCESS]: (state, action) => {
     return { 
@@ -57,7 +78,7 @@ const ACTION_HANDLERS = {
       message: action.payload.message, 
       editing: '',
       isEditing: false, 
-      isSubmiting: false, 
+      isSubmitting: false, 
       animals: [ 
         ...state.animals.slice(0, action.payload.index), 
         {

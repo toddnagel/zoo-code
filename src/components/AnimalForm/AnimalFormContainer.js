@@ -6,20 +6,23 @@ import moment from 'moment';
 
 import AnimalFormComponent from './AnimalForm';
 
-import { submitForm, modifyAnimal, resetForm } from '../../sagas/animalSaga/actions';
+import { submitForm, modifyAnimal, resetForm } from 'sagas/animalSaga/actions';
 
 const mapStateToProps = state => {
   
-  const formValues = state.animalSaga.isEditing ? state.animalSaga.animals[state.animalSaga.editing]: {};
-   
-  if(state.animalSaga.isEditing && formValues && formValues.dob){    
-    formValues.dob = new Date(moment(formValues.dob).format('MM-DD-YYYY'));
-  } 
-   
+  let initialValues = {};
+
+  if(state.animalSaga.isEditing){
+    initialValues = {
+      ...state.animalSaga.animals[state.animalSaga.editing],
+      dob: new Date(moment(initialValues.dob).format('MM-DD-YYYY'))
+    }
+  }
+
   return {
     animalSaga: state.animalSaga,
     form: 'animalForm',
-    initialValues: formValues,
+    initialValues,
   }
 }
 

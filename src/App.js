@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import Routes from './routes'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-import './App.css'
-
 class App extends Component {
   static propTypes = {
     init: PropTypes.func,
@@ -12,8 +10,8 @@ class App extends Component {
   }
 
   render() {
-    this.props.init();
-    this.props.loadAnimals();
+    this.props.init(); // left this in, could load in inital page data used elsewhere to remain consistant.
+    this.props.loadAnimals(); // load in the existing animals, labels, and error messages.
 
     return (
       <MuiThemeProvider>

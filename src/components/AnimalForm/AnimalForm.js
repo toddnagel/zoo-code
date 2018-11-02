@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 
 import moment from 'moment';
 
-import DatePicker from 'material-ui/DatePicker';
+import { DatePicker } from 'redux-form-material-ui';
+
 //import classNames from 'classnames';
-//import moment from 'moment';
 
 import { Field } from 'redux-form';
 
@@ -18,33 +18,38 @@ import Grid from '@material-ui/core/Grid';
 import { renderTextField } from './fields/renderTextField';
 import { renderSelectField } from './fields/renderSelectField';
 import { renderCheckbox } from './fields/renderCheckbox';
-//import { renderDatepicker } from './fields/renderDatepicker';
+import { dynamicValidator } from './dynamicValidator';
 
 //import asyncValidate from './asyncValidate';
-import { required, alpha, alphaNumericName, minMaxLengthName, numericCost, formatCost, onlyDecimal } from './validate';
 
-const styles = theme => ({
+import { 
+  required, 
+  alpha, 
+  alphaNumericName, 
+  minMaxLengthName, 
+ // numericCost, 
+  formatCost, 
+  onlyDecimal
+ } from './validate';
+
+ const styles = theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
   },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 200,
-  },
-  dense: {
-    marginTop: 19,
-  },
-  menu: {
-    width: 200,
-  },
 });
 
-
 class AnimalForm extends Component {
+  
   static propTypes = {
-    animalSaga: PropTypes.object
+    animalSaga: PropTypes.shape({
+      animals: PropTypes.array,
+      formData: PropTypes.shape({
+        errors: PropTypes.array,
+        labels: PropTypes.array,
+      }),
+      species: PropTypes.array,
+    })
   }
 
   constructor(props) {
@@ -59,9 +64,7 @@ class AnimalForm extends Component {
   }
 
   handleDate = (value) => {
-    if(value){
-      this.setState({ dob: value })
-    }
+    this.setState({ dob: value })
   }
 
   handleSubmit = (values) => {
@@ -85,35 +88,40 @@ class AnimalForm extends Component {
 
     resetForm();
   }
-
+  
   render() {
-    const { handleSubmit, pristine, submitting, initialValues, reset, classes } = this.props;
-    const { isEditing, isSubmiting, species, formData } = this.props.animalSaga;  
+    const { handleSubmit, pristine, submitting, initialValues, reset } = this.props;
+    const { isEditing, species, isSubmitting, formData } = this.props.animalSaga;  
     
-    if(!species || !formData || isSubmiting){
+    if(!species || !formData || isSubmitting){
       return <span>Loading...</span>
     }
 
-    const title = isEditing ? 'Edit' : 'Add';
-    const labels = formData[0].labels;
+    const { errors, labels } = formData;
+    
     const speciesItems = species.map((display,index) => (
-      <MenuItem key={index} value={display} primaryText={display} selected={initialValues.species === display} />
+      <MenuItem key={index} 
+                value={display} 
+                primaryText={display} 
+                selected={initialValues.species === display} />
     ));
-console.log('propr',this.props)
+   
     return (
       <div>
         <Typography component="h5" variant="h5">
-          {title} Animal Form
+          {isEditing ? 'Edit' : 'Add'} Animal Form
         </Typography>
-        <form onSubmit={handleSubmit(this.handleSubmit.bind(this))} autoComplete="off">
-          <Grid container spacing={16}>
+        <form onSubmit={handleSubmit(this.handleSubmit.bind(this))} 
+              noValidate 
+              autoComplete="off">
+          <Grid container 
+              spacing={16}>
             <Grid item xs={12}>
               <Field
                   name="name"
                   component={renderTextField}
                   label={labels.name[0]}
                   hintText={labels.name[1]}
-                  classes={classes['input']}
                   required
                   validate={[required, minMaxLengthName, alphaNumericName]}
                   warn={alpha}
@@ -126,7 +134,15 @@ console.log('propr',this.props)
                 label={labels.cost[0]}
                 hintText={labels.cost[1]} 
                 required               
-                validate={[required,numericCost]}
+                validate={[
+                  (value, allValues, props, name) => {
+                        let customErrors = dynamicValidator(value, {
+                          required: true,
+                          msg: { required: errors.required }
+                        });
+                        return customErrors;
+                   }
+                ]}
                 format={formatCost}
                 normalize={onlyDecimal}
               />
@@ -141,33 +157,51 @@ console.log('propr',this.props)
                 label={labels.species[0]}
                 hintText={labels.species[1]}     
                 defaultValue={initialValues.species}     
-                validate={[required]}
+                validate={[
+                  (value, allValues, props, name) => {
+                        let customErrors = dynamicValidator(value, {
+                          required: true,
+                          msg: { required: errors.required }
+                        });
+                        return customErrors;
+                   }
+                ]}
               >
                 {speciesItems}
               </Field>
             </Grid>
             <Grid item xs={4}> 
-            <DatePicker
-              value={this.state.dob ? this.state.dob : initialValues.dob || null}
+            <Field
+              value={this.state.dob || new Date(this.state.dob) || new Date()}
               name="dob"
+              component={DatePicker}
               required
-              defaultDate={initialValues.dob || null}
+              defaultDate={initialValues.dob ? new Date(initialValues.dob) : null}
               floatingLabelText={labels.dob[0]}
               type='text'
-              errorText={this.props.touched && this.props.error}
               maxDate={new Date()}
               minDate={new Date(moment().subtract(60, 'years').calendar())}
               autoOk
               className="form-control"
               onChange={(event, date)=> this.handleDate(date)}
-              formatDate={(date) => moment(date).format('MM-DD-YYYY')}                      
+              formatDate={(date) => moment(date).format('MM-DD-YYYY')}  
+              format={null}     
+              validate={[
+                (value, allValues, props, name) => {
+                      let customErrors = dynamicValidator(value, {
+                        required: true,
+                        msg: { required: errors.required }
+                      });
+                      return customErrors;
+                 }
+           ]}               
             />
             </Grid>
           </Grid>
           <Field
               name="oversize"
               component={renderCheckbox}
-              label="Bigger then a breadbox?"
+              label={labels.oversize[0]}
             />
           <div className="form-control mt-1">
             <button type="submit" disabled={((pristine && !this.state.dob) && !isEditing) || submitting}>Submit</button>
@@ -183,11 +217,13 @@ console.log('propr',this.props)
 }
 
 AnimalForm.propTypes = {
-  modifyAnimal: PropTypes.func.isRequired,
   submitForm: PropTypes.func.isRequired,
   resetForm: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  classes: PropTypes.object.isRequired,
+  modifyAnimal: PropTypes.func.isRequired,
+  pristine: PropTypes.any, // from redux-form
+  submitting: PropTypes.any, // from redux-form
+  reset:  PropTypes.any, // from redux-form
+  handleSubmit: PropTypes.any, // from redux-form
 };
 
 export default withStyles(styles)(AnimalForm);

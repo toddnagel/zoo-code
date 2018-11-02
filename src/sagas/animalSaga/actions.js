@@ -38,13 +38,20 @@ export const submitForm = (values, index) => {
   if(index){
     return {
       type: MODIFY_FORM_SUBMITTED,
-      payload: { animal: animal, index: index, isSubmiting: true }
+      payload: { 
+        animal, 
+        index, 
+        isSubmitting: true
+      }
     };
   }
   else{
     return {
       type: FORM_SUBMITTED,
-      payload: { animal: animal, isSubmiting: true }
+      payload: { 
+        animal, 
+        isSubmitting: true
+      }
     };
   }  
 };
@@ -55,7 +62,11 @@ export const modifyAnimal = (values, index) => {
     
   return {
     type: MODIFY_FORM_SUBMITTED,
-    payload: { animal: animal, index: index, isSubmiting: true }
+    payload: { 
+      animal, 
+      index, 
+      isSubmitting: true 
+    }
   };
 };
 
